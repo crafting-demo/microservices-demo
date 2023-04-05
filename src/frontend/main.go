@@ -29,7 +29,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/plugin/ochttp"
-	"go.opencensus.io/plugin/ochttp/propagation/b3"
+	"go.opencensus.io/plugin/ochttp/propagation/tracecontext"
 	"go.opencensus.io/stats/view"
 	"go.opencensus.io/trace"
 	"google.golang.org/grpc"
@@ -148,7 +148,7 @@ func main() {
 	handler = ensureSessionID(handler)             // add session ID
 	handler = &ochttp.Handler{                     // add opencensus instrumentation
 		Handler:     handler,
-		Propagation: &b3.HTTPFormat{}}
+		Propagation: &tracecontext.HTTPFormat{}}
 
 	log.Infof("starting server on " + addr + ":" + srvPort)
 	log.Fatal(http.ListenAndServe(addr+":"+srvPort, handler))
