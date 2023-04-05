@@ -69,6 +69,13 @@ func (lh *logHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		log = log.WithField("session", v)
 	}
 	log.Debug("request started")
+
+	r.Header.Set("tracestate", "x=y")
+
+	for key, value := range r.Header {
+		log.Logf(logrus.ErrorLevel, "%s=%s", key, value)
+	}
+
 	defer func() {
 		log.WithFields(logrus.Fields{
 			"http.resp.took_ms": int64(time.Since(start) / time.Millisecond),
